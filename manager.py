@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from sync import *
 
 def main():
 	parser = ArgumentParser(description="Compress and sync data from local directory to remote directory")
@@ -23,12 +24,12 @@ def main():
 			+ 'high: Compress locally, use maximum network resources until transmission is complete.')
 
 	parser.add_argument('dest',
-		help="Username, address, and directory of destination machine. Will use SSH keys"
+		help="Username, address, and directory of destination machine. Will use SSH keys "
 			+ "if available, otherwise will require password for destination machine's user")
 
 	args = parser.parse_args()
 
-	if '@' is not in args.dest:
+	if '@' not in args.dest:
 		rsp = input("This destination appears to be on this machine. Continue with sync? (y/n):")
 		while rsp is not 'y' or rsp is not 'n':
 			rsp = input("Please try 'y' or 'n':")
@@ -36,11 +37,14 @@ def main():
 			sys.exit()
 
 	if args.priority == 'low':
-		print('low')
+		print("Sending files over low priority transmission...")
+		send_to_low(args.session, args.dest)
 	elif args.priority == 'medium':
-		print('medium')
+		print("Sending files over medium priority transmission...")
+		send_to_med(args.session, args.dest)
 	elif args.priority == 'high':
-		print('high')
+		print("Sending files over high priority transmission...")
+		send_to_high(args.session, args.dest)
 
 		
 if __name__ == "__main__":
