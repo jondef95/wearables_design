@@ -1,5 +1,4 @@
-import serial, sys, os, datetime
-import atexit
+import serial, sys, os, datetime, time, atexit
 
 hr_session = 0
 hr = []
@@ -16,7 +15,7 @@ def shutdown():
 	write_to_file(pr, "pressure")
 	write_to_file(temp, "temp")
 
-	
+
 def write_to_file(data_list, name):
 	prefix = str(name) + "_"
 	date = datetime.datetime.now().strftime("%d-%m-%y_") 
@@ -64,11 +63,12 @@ def process_line(line):
 
 def read_serial():
 	serialport = None
-	try:
-		serialport = serial.Serial("/dev/ttyACM0", 9600, timeout=0.5)
-	except (serial.SerialException, serial.SerialException) as error:
-			sys.stderr("Error while trying to establish connection. Shutting down...\n%s" % str(error))
-			sys.exit()	
+	while serialport is None:
+		try:
+			serialport = serial.Serial("/dev/ttyACM0", 9600, timeout=0.5)
+		except (serial.SerialException, serial.SerialException) as error:
+			sys.stderr.write(("Error while trying to establish connection. Trying again...\n"))
+			time.sleep(5)
 	line = ""
 	while True:
 		try:
@@ -76,8 +76,8 @@ def read_serial():
 			char = byte.decode("utf-8") 
 			print(byte, char)
 		except (serial.SerialException, serial.SerialTimeoutException) as error:
-			sys.stderr("Error while trying to read. Shutting down...\n%s" % str(error))
-			sys.exit()	
+			sys.stderr("Error while trying to read. Shutting down...\n")
+			char = "\n"
 		if char is '#':
 			print(line)
 			process_line(line)
