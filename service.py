@@ -25,14 +25,14 @@ def write_to_temp():
 	global temp, temp_session
 	filename = "temp_"
 	date = datetime.datetime.now().strftime("%d-%m-%y_") 
-	filename = filename + date + str(hr_session)
+	filename = filename + date + str(temp_session)
 	f = open(filename, 'a')
-	for data in hr:
+	for data in temp:
 		f.write(str(data))
 		f.write(',\n')
 	f.close()
-	hr = []
-	hr_session = hr_session + 1
+	temp = []
+	temp_session = temp_session + 1
 
 def process_line(line):
 	global curr_type, hr
