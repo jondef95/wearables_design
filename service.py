@@ -36,7 +36,7 @@ def write_to_temp():
 
 def process_line(line):
 	global curr_type, hr
-	data_type, data = str.split(line, " ")
+	data_type, data = str.split(line, "~")
 	write = False
 	if curr_type == "" or curr_type != data_type:
 		curr_type = data_type
@@ -53,11 +53,14 @@ def process_line(line):
 	elif data_type == "temp":
 		print("getting temperature")
 		# write to temperature file
-		# write_to_temp(data)
+		temp.append(data)
+		if write:
+			write_to_temp(data)
 	elif data_type == "press": 
 		print("getting pressure")
 		# write to pressure file
-		# write_to_pr(data)
+		#press.append(data)
+		#write_to_pr(data)
 	else:
 		sys.stderr("Unrecognized datatype: \'%s\'" % data_type)
 
@@ -72,7 +75,9 @@ def read_serial():
 	line = ""
 	while True:
 		try:
-			char = serialport.read()
+			byte = serialport.read()
+			char = byte.decode("utf-8") 
+			print(byte, char)
 		except (serial.SerialException, serial.SerialTimeoutException) as error:
 			sys.stderr("Error while trying to read. Shutting down...\n%s" % str(error))
 			sys.exit()	
@@ -80,7 +85,7 @@ def read_serial():
 			print(line)
 			process_line(line)
 			line = ""
-		else:
+		elif char is not '\r' and char is not '\n':
 			line = line + char
 def main():
 	read_serial()
