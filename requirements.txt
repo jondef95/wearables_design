@@ -1,0 +1,4 @@
+matplotlib==2.0.0
+Pillow==4.1.1
+pyserial==3.3
+simplejson==3.10.0
