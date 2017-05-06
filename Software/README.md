@@ -14,6 +14,7 @@ On Linux machines, the owner of USB connections must be within the group ‘dial
 The service and session manager save and access data from within the `/tmp` directory. However, this directory is only writable by the root user by default. To change this, run the command (and enter the root user password when prompted): 
 
 `sudo chown root:root /tmp`
+
 `sudo chmod 1777 /tmp`
 
 ## Setting Up SSH Keys
@@ -30,14 +31,18 @@ The file called `client_rsa.pub` is placed on another machine to allow you to es
 Once the other machine has your public key, they will need to add it to their authorized keys. If you do not have a file to store authorized keys, you will need to create that file, and copy the contents of the key into that file. Here are the commands:
 
 `touch ~/.ssh/authorized_keys`
+
 `chmod 0644 ~/.ssh/authorized_keys`
+
 `cat /path/to/client_rsa.pub > ~/.authorized_keys`
 
 ## Running the Software
 The software suite consists of two separate Python3 programs: `service.py` and `manager.py`. In order to use these, you should run the following commands to ensure you have the required packages:
 
 `sudo apt-get install openssh-server python3-pip`
+
 `sudo apt-get update`
+
 `sudo pip3 install -r /path/to/wearables_design/Software/requirements.txt`
 
 ###Service - Interacting with Flora
@@ -64,6 +69,6 @@ The priority determines which speed rsync uses. The manager will run until the s
 ####Extracting Sessions
 To extract a session that has been sent, you will use the `recv` mode of the manager. As the session parameter, you will use the full path to the session, including the file extension. The command would be:
 
-python3 manager.py --mode=recv /path/to/session.tar.gz
+`python3 manager.py --mode=recv /path/to/session.tar.gz`
 
 This will extract the tarfile and store it in the session folder for access. 
