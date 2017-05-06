@@ -33,7 +33,7 @@ def main():
 	args = parser.parse_args()
 
 	if args.mode == 'recv':
-		tarname = args.session + ".tar.gz"
+		tarname = args.session
 		ExtractFolder(tarname)
 
 	if '@' not in args.dest:
