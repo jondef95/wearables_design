@@ -92,12 +92,12 @@ class CompressDirectory(ProcessBase):
         shutil.make_archive(name, 'gztar', path)
         archive_name = name + ".tar.gz"
         tmp_name = "/tmp/" + name + "/" + archive_name
-        print("made it to move")
-        print(archive_name)
-        print(tmp_name)
-        print(shutil.move(archive_name, tmp_name))
+        shutil.move(archive_name, tmp_name)
 
 def ExtractFolder(tarname):
+    if (not os.path.exists(tarname)):
+        stderr.write("Tarfile does not exist")
+        return
     filename = str.split(tarname, '.')[0]
     dirname = filename + '_' + datetime.datetime.now().strftime("%d-%m-%y_%H%M%S") 
     try:
