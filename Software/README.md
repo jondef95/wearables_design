@@ -45,19 +45,19 @@ The software suite consists of two separate Python3 programs: `service.py` and `
 
 `sudo pip3 install -r /path/to/wearables_design/Software/requirements.txt`
 
-###Service - Interacting with Flora
+### Service - Interacting with Flora
 The service allows your machine to connect to the Flora controller to collect and store the data. For every context switch, the service will store that section of data into a different file. To run the service, make sure that you have changed the permissions as described above, then run the command:
 
 `python3 service.py -R`
 
 While it is running, you should see outputs that represent the byte that was just sent, then also the complete line of data that the controller was attempting to send. To stop the service, simply press `CTRL+C`. All files related to the session are stored in a folder in `/tmp` with a randomly generated string, which is considered our ‘session ID’ for this project.
 
-###Session Manager
+### Session Manager
 The session manager has two main functions: packaging and sending sessions, and extracting sessions. The steps to use each of these features are described below. Make sure that all permissions have been changed, and packages have been installed as described above. To read the manual on the file, use the following command:
 
 `python3 manager.py -h`
 
-####Packaging and Sending Sessions
+#### Packaging and Sending Sessions
 To add to the information within a session, a user can include other files within the session directory created by the service. To do so, simply copy the files within the directory inside of `/tmp`. Use the `send` mode.
 
 Sending sessions searches for a specific session with the `/tmp` directory, compresses all files that it is capable of compressing, packages the directory as a `tar.gz` file, and uses rsync to send it securely to another machine. To send a session, use the session ID generated from the service, or use another directory name within `/tmp`. The command would be structured as follows:
@@ -66,7 +66,7 @@ Sending sessions searches for a specific session with the `/tmp` directory, comp
 
 The priority determines which speed rsync uses. The manager will run until the session is completely sent, and will retry after a certain amount of time if the transfer fails. It has a time-based context-awareness; it will change upload speeds based on priority and time. High priority does not use any bandwidth limiting.
 
-####Extracting Sessions
+#### Extracting Sessions
 To extract a session that has been sent, you will use the `recv` mode of the manager. As the session parameter, you will use the full path to the session, including the file extension. The command would be:
 
 `python3 manager.py --mode=recv /path/to/session.tar.gz`
